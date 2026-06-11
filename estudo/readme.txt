@@ -1,0 +1,1 @@
+Aqui são algumas referências que usei para montar o código do modelo

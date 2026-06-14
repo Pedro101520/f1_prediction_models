@@ -72,8 +72,11 @@ class Etl():
     def results_equipe(self):
         infos_equipe = []
 
-        acesso_equipe = requests.get(f"https://api.jolpi.ca/ergast/f1/{ANO_ATUAL}/{self.proxima_rodada}/constructorstandings/").json()
-        teams = acesso_equipe["MRData"]["StandingsTable"]["StandingsLists"][0]["ConstructorStandings"]
+        try:
+            acesso_equipe = requests.get(f"https://api.jolpi.ca/ergast/f1/{ANO_ATUAL}/{self.proxima_rodada}/constructorstandings/").json()
+            teams = acesso_equipe["MRData"]["StandingsTable"]["StandingsLists"][0]["ConstructorStandings"]
+        except Exception as e:
+            raise Exception(f"Erro: {e}")
         for team in teams:
             infos_equipe.append({
                 "temporada_atual": int(acesso_equipe["MRData"]["StandingsTable"]["season"]),
@@ -200,8 +203,11 @@ class Etl():
     def quali(self):
         self.etl_clima()
 
-        acesso_results = requests.get(f"https://api.jolpi.ca/ergast/f1/{ANO_ATUAL}/{self.proxima_rodada+1}/qualifying/").json()
-        quali_results = acesso_results["MRData"]["RaceTable"]["Races"]
+        try:
+            acesso_results = requests.get(f"https://api.jolpi.ca/ergast/f1/{ANO_ATUAL}/{self.proxima_rodada+1}/qualifying/").json()
+            quali_results = acesso_results["MRData"]["RaceTable"]["Races"]
+        except Exception as e:
+            raise Exception(f"Erro: {e}")
 
         if not quali_results:
             self.merge["rodada_atual"] = self.proxima_rodada + 1

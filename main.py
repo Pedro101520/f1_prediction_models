@@ -1,9 +1,10 @@
 import joblib
 import pandas as pd
 
-from flask import Flask, make_response, jsonify, request
+from flask import Flask, jsonify
 from models.resultados import Acesso_Inicial
 from models.etl_driver import Etl
+from models.predict import Modelo
 
 app = Flask(__name__)
 
@@ -23,10 +24,14 @@ app = Flask(__name__)
 def pipeline():
     resultados = Acesso_Inicial()
     etl = Etl()
+    modelo = Modelo()
     try:
         df_inicial = resultados.results()
         etl.set_df_inicial(df_inicial)
         df = etl.quali()
+        podio = modelo.previsao_podio(df)
+
+        print(podio)
 
         df.to_csv(r"DATA\analise.csv", index=False)
     except Exception as e:

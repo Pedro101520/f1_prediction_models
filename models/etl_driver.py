@@ -107,8 +107,8 @@ class Etl():
                 "pontos_anterior": driver["points"],
                 "posicao_camp_anterior": driver["position"],
                 "num_vitorias_anterior": driver["wins"],
-                "media_ultimas_3_anterior": f"{pd.to_numeric(df_posicao_1, errors="coerce").tail(3).reset_index(drop=True).mean():.2f}",
-                "media_ultimas_5_anterior": f"{pd.to_numeric(df_posicao_1, errors="coerce").tail(5).reset_index(drop=True).mean():.2f}",
+                "media_ultimas_3_anterior": f"{pd.to_numeric(df_posicao_1, errors='coerce').tail(3).reset_index(drop=True).mean():.2f}",
+                "media_ultimas_5_anterior": f"{pd.to_numeric(df_posicao_1, errors='coerce').tail(5).reset_index(drop=True).mean():.2f}",
                 "qtde_abandonos_anterior": len(count_abandono)
             })
         self.df_driver = pd.DataFrame(infos_piloto)

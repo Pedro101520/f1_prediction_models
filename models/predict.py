@@ -1,29 +1,18 @@
 import os
-import streamlit as st
 from google.cloud import storage
 from google.oauth2 import service_account
-import pickle
+import io
+import joblib
 
 
 class Modelo():
     def __init__(self):
         pass
 
-    def get_storage_client(self):
-        if os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
-            return storage.Client()
-        
-        credentials = service_account.Credentials.from_service_account_info(st.secrets["gcp_service_account"])
-        return storage.Client(
-            credentials=credentials,
-            project=credentials.project_id
-        )
-
-
     def previsao_podio(self, df):
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "clever-axe-457319-g8-833d2d4ab67f.json"
 
-        client = self.get_storage_client()
+        client = storage.Client()
+
         bucket = client.bucket("f1-dashboard-pilotos")
         blob1 = bucket.blob("modelos/modelo_com_quali.pkl")
         blob2 = bucket.blob("modelos/encoder_com_quali.pkl")
@@ -36,10 +25,10 @@ class Modelo():
         dados3 = blob3.download_as_bytes()
         dados4 = blob4.download_as_bytes()
 
-        modelo_quali = pickle.loads(dados1)
-        encoder_quali = pickle.loads(dados2)
-        modelo = pickle.loads(dados3)
-        encoder = pickle.loads(dados4)
+        modelo_quali = joblib.load(io.BytesIO(dados1))
+        encoder_quali = joblib.load(io.BytesIO(dados2))
+        modelo = joblib.load(io.BytesIO(dados3))
+        encoder = joblib.load(io.BytesIO(dados4))
 
         if "q1_atual" in df.columns:
             X_train_transformed = encoder_quali.transform(df)
@@ -50,7 +39,12 @@ class Modelo():
             df_result['predicao'] = modelo_quali.predict(X_train_transformed)
 
             predict = df_result[['id_piloto_atual', 'prob_podio', 'predicao']].sort_values('prob_podio', ascending=False)
-            return predict
+            json_dados = predict.to_json(orient='records', indent=4, force_ascii=False)
+            blob5 = bucket.blob("previsao.json") 
+            blob5.upload_from_string(
+                json_dados, 
+                content_type="application/json"
+            )
         else:
             X_train_transformed = encoder.transform(df)
 
@@ -61,5 +55,10 @@ class Modelo():
             df_result['predicao'] = modelo.predict(X_train_transformed)
 
             predict = df_result[['id_piloto_atual', 'prob_podio', 'predicao']].sort_values('prob_podio', ascending=False)
-            return predict
+            json_dados = predict.to_json(orient='records', indent=4, force_ascii=False)
+            blob5 = bucket.blob("previsao.json") 
+            blob5.upload_from_string(
+                json_dados, 
+                content_type="application/json"
+            )
 

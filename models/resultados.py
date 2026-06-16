@@ -40,7 +40,8 @@ class Acesso_Inicial:
                             "target": result["position"],
                             "grid_anterior": result["grid"],
                             "status": result["status"],
-                            "pontos_anterior_individual": result["points"]
+                            "pontos_anterior_individual": result["points"],
+                            "status": result["status"]
                         })
                 rodada += 1
             time.sleep(1)

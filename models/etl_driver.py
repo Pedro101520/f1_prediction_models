@@ -25,7 +25,7 @@ class Etl():
     def set_df_inicial(self, df):
         self.df_inicio = df
         self.proxima_rodada = self.df_inicio[(self.df_inicio["temporada_atual"] == ANO_ATUAL)]["rodada_atual"].max()
-        self.count_abandono = self.count_abandono = self.df_inicio[(self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["posicao_corrida_anterior"] == "R") & (self.df_inicio["id_piloto_atual"] == "max_verstappen")]["posicao_corrida_anterior"]
+        self.count_abandono = self.count_abandono = self.df_inicio[(self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["status"] == "Retired") & (self.df_inicio["id_piloto_atual"] == "max_verstappen")]["posicao_corrida_anterior"]
         self.acesso_api()
         self.pilotos = self.df_inicio[(self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] == self.proxima_rodada)]["id_piloto_atual"]
         self.equipe = self.df_inicio[(self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] == self.proxima_rodada)]["id_equipe_atual"]
@@ -98,7 +98,7 @@ class Etl():
             raise Exception(f"Erro piloto: {e}")
         for driver in drivers:
             df_posicao_1 = self.df_inicio[(self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"])]["posicao_ultima_corrida"]
-            count_abandono = self.df_inicio[(self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["posicao_corrida_anterior"] == "R") & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"])]["posicao_corrida_anterior"]
+            count_abandono = self.df_inicio[(self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["status"] == "Retired") & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"])]["posicao_corrida_anterior"]
 
             infos_piloto.append({
                 "temporada_atual": int(acesso_piloto["MRData"]["StandingsTable"]["season"]),

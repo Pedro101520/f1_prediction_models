@@ -19,6 +19,7 @@ def pipeline():
         etl.set_df_inicial(df_inicial)
         df = etl.quali()
         modelo.previsao_podio(df)
+        df.to_csv(r"D:\pedro\Documents\modelo_f1\DATA\oficial.csv", index=False)
     except Exception as e:
         return jsonify({"erro": str(e)}), 500
 

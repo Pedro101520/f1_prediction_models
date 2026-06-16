@@ -98,7 +98,7 @@ class Etl():
             raise Exception(f"Erro piloto: {e}")
         for driver in drivers:
             df_posicao_1 = self.df_inicio[(self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"])]["posicao_ultima_corrida"]
-            count_abandono = self.df_inicio[( (self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"]) ) & ( (self.df_inicio["status"] == 'Retired') | (self.df_inicio["status"] == "Did not start") | (self.df_inicio["posicao_corrida_anterior"] == "R") )]["status"].count()
+            count_abandono = self.df_inicio[( (self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"]) ) & ( (self.df_inicio["status"] == 'Retired') | (self.df_inicio["status"] == "Did not start") )]["status"].count()
 
             infos_piloto.append({
                 "temporada_atual": int(acesso_piloto["MRData"]["StandingsTable"]["season"]),

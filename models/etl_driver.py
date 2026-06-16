@@ -98,7 +98,7 @@ class Etl():
             raise Exception(f"Erro piloto: {e}")
         for driver in drivers:
             df_posicao_1 = self.df_inicio[(self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"])]["posicao_ultima_corrida"]
-            count_abandono = self.df_inicio[(self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["status"] == "Retired") & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"])]["posicao_corrida_anterior"]
+            count_abandono = self.df_inicio[( (self.df_inicio["temporada_atual"] == ANO_ATUAL) & (self.df_inicio["rodada_atual"] <= self.proxima_rodada) & (self.df_inicio["id_piloto_atual"] == driver["Driver"]["driverId"]) ) & ( (self.df_inicio["status"] == 'Retired') | (self.df_inicio["status"] == "Did not start") | (self.df_inicio["posicao_corrida_anterior"] == "R") )]["status"].count()
 
             infos_piloto.append({
                 "temporada_atual": int(acesso_piloto["MRData"]["StandingsTable"]["season"]),
@@ -109,7 +109,7 @@ class Etl():
                 "num_vitorias_anterior": driver["wins"],
                 "media_ultimas_3_anterior": f"{pd.to_numeric(df_posicao_1, errors='coerce').tail(3).reset_index(drop=True).mean():.2f}",
                 "media_ultimas_5_anterior": f"{pd.to_numeric(df_posicao_1, errors='coerce').tail(5).reset_index(drop=True).mean():.2f}",
-                "qtde_abandonos_anterior": len(count_abandono)
+                "qtde_abandonos_anterior": count_abandono
             })
         self.df_driver = pd.DataFrame(infos_piloto)
         self.df_driver["media_ultimas_3_anterior"] = self.df_driver["media_ultimas_3_anterior"].astype(float)

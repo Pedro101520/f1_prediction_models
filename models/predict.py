@@ -39,6 +39,7 @@ class Modelo():
             df_result['predicao'] = modelo_quali.predict(X_train_transformed)
 
             predict = df_result[['id_piloto_atual', 'prob_podio', 'predicao']].sort_values('prob_podio', ascending=False)
+            predict["quali"] = "True"
             json_dados = predict.to_json(orient='records', indent=4, force_ascii=False)
             blob5 = bucket.blob("previsao.json") 
             blob5.upload_from_string(
@@ -55,6 +56,7 @@ class Modelo():
             df_result['predicao'] = modelo.predict(X_train_transformed)
 
             predict = df_result[['id_piloto_atual', 'prob_podio', 'predicao']].sort_values('prob_podio', ascending=False)
+            predict["quali"] = "False"
             json_dados = predict.to_json(orient='records', indent=4, force_ascii=False)
             blob5 = bucket.blob("previsao.json") 
             blob5.upload_from_string(

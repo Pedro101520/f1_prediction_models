@@ -9,7 +9,7 @@ from models.predict import Modelo
 
 app = Flask(__name__)
 
-@app.route("/predicao/formula1", methods=["GET"])
+@app.route("/predicao/formula1", methods=["POST"])
 def pipeline():
     resultados = Acesso_Inicial()
     etl = Etl()
@@ -19,6 +19,7 @@ def pipeline():
         etl.set_df_inicial(df_inicial)
         df = etl.quali()
         modelo.previsao_podio(df)
+        df.to_csv(r"D:\pedro\Documents\modelo_f1\DATA\a.csv")
     except Exception as e:
         return jsonify({"erro": str(e)}), 500
 

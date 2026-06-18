@@ -46,6 +46,7 @@ class Modelo():
                 json_dados, 
                 content_type="application/json"
             )
+            print(json_dados)
         else:
             X_train_transformed = encoder.transform(df)
 
@@ -63,4 +64,3 @@ class Modelo():
                 json_dados, 
                 content_type="application/json"
             )
-

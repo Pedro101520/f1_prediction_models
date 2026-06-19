@@ -2,6 +2,8 @@
 
 **Repositório do ETL:** https://github.com/Pedro101520/API_ETL_F1
 
+Repositório do dashboard: https://github.com/Pedro101520/F1_Analytics
+
 Estes códigos foram desenvolvidos com o objetivo de prever o pódio da Fórmula 1 através de um método de classificação, utilizando a biblioteca **XGBoost**.
 
 ## Tecnologias Utilizadas

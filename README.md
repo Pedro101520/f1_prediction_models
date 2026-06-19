@@ -1,4 +1,5 @@
-**Dashboard:** https://formula1-analytics-project.streamlit.app/
+**Dashboard:** https://formula1-analytics-project.streamlit.app
+
 **Repositório do ETL:** https://github.com/Pedro101520/API_ETL_F1
 
 Estes códigos foram desenvolvidos com o objetivo de prever o pódio da Fórmula 1 através de um método de classificação, utilizando a biblioteca **XGBoost**.

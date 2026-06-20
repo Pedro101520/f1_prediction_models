@@ -22,7 +22,7 @@ Estes códigos foram desenvolvidos com o objetivo de prever o pódio da Fórmula
 O projeto segue o seguinte fluxo:
 
 ```
-ETL (Jolpica + Open-Meteo + FastF1)
+Acesso das informações salvas pela etapa da API de ETL que fiz (Link está no inicio da documentação)
         ↓
 Feature Engineering (sem Data Leakage)
         ↓
@@ -30,7 +30,7 @@ Treino dos modelos (XGBClassifier)
         ↓
 Modelos salvos (.pkl) no Google Cloud Storage
         ↓
-ETL de inferência (busca dados da próxima rodada)
+ETL para dados que serão usados exclusivamente no predict do modelo
         ↓
 API de predição (Cloud Run + Cloud Scheduler)
         ↓

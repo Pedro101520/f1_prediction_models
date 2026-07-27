@@ -59,6 +59,10 @@ class Modelo():
             predict = df_result[['id_piloto_atual', 'prob_podio', 'predicao']].sort_values('prob_podio', ascending=False)
             predict["quali"] = "False"
             json_dados = predict.to_json(orient='records', indent=4, force_ascii=False)
+            with open("previsao.json", "w", encoding="utf-8") as arquivo:
+                arquivo.write(json_dados)
+
+            print("JSON salvo com sucesso!")
             blob5 = bucket.blob("previsao.json") 
             blob5.upload_from_string(
                 json_dados, 

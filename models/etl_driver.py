@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 import time
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from utils.tempo import tempo_para_ms
 
 ANO_ATUAL = datetime.now().year
@@ -166,6 +166,16 @@ class Etl():
             data_corrida = requests.get(f"https://api.jolpi.ca/ergast/f1/{ANO_ATUAL}/{self.proxima_rodada+1}/").json()
             hora = data_corrida["MRData"]["RaceTable"]["Races"][0]["time"]
             data = data_corrida["MRData"]["RaceTable"]["Races"][0]["date"]
+
+            data = datetime.strptime(data, "%Y-%m-%d").date()
+            hoje = datetime.today().date()
+
+            diferenca = (data - hoje).days
+
+            if diferenca > 20:
+                data = data - timedelta(days=20)
+
+            data = str(data)
 
             acesso_clima = requests.get(f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longetude}&start_date={data}&end_date={data}&hourly=temperature_2m,relative_humidity_2m,precipitation,shortwave_radiation,surface_temperature&timezone=auto").json()
         except Exception as e:
